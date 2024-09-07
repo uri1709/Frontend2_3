@@ -1,119 +1,113 @@
-import logo from './logo.svg';
 import styles from './App.module.css';
 import './App.css';
+import { useState } from 'react';
+
+let result = 0;
 
 export const App = () => {
 	const NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-	const OPERATORS = ['C', '+', '-', '='];
-	const resultContent = '';
 
-	const Num0 = () => {
-		console.log('Клик 0');
-	};
-	const Num1 = () => {
-		console.log('Клик 1');
-	};
-	const Num2 = () => {
-		console.log('Клик 2');
-	};
-	const Num3 = () => {
-		console.log('Клик 3');
-	};
-	const Num4 = () => {
-		console.log('Клик 4');
-	};
-	const Num5 = () => {
-		console.log('Клик 5');
-	};
-	const Num6 = () => {
-		console.log('Клик 6');
-	};
-	const Num7 = () => {
-		console.log('Клик 7');
-	};
-	const Num8 = () => {
-		console.log('Клик 8');
-	};
-	const Num9 = () => {
-		console.log('Клик 9');
-	};
+	const [operand1, setOperand1] = useState('');
+	const [opertor, setOpertor] = useState('');
+	const [operand2, setOperand2] = useState('');
 
-	const butPlus = () => {
-		console.log('Клик +');
-	};
-	const butMinus = () => {
-		console.log('Клик -');
-	};
-	const butClear = () => {
-		console.log('Клик C');
-	};
-	const butResult = () => {
-		console.log('Клик =');
-	};
-	console.log(styles);
+	const buttons = [];
+
+	buttons.push({ id: 'butClear', nameStyle: '', content: 'C', func: butClick });
+	buttons.push({ id: 'butPlus', nameStyle: '', content: '+', func: butClick });
+	buttons.push({ id: 'butMinus', nameStyle: '', content: '-', func: butClick });
+
+	NUMS.forEach((num) => {
+		if (num === '0') {
+			buttons.push({
+				id: '0',
+				nameStyle: 'button-zero',
+				content: '0',
+				func: butClick,
+			});
+		} else {
+			buttons.push({
+				id: `${num}`,
+				nameStyle: '',
+				content: num,
+				func: butClick,
+			});
+		}
+	});
+	buttons.push({
+		id: 'butResult',
+		nameStyle: 'button-equal',
+		content: '=',
+		func: butClick,
+	});
+
+	function butClick(e) {
+		console.log(e.target.id);
+
+		if (e.target.id === 'butClear') {
+			result = 0;
+			setOperand1('');
+			setOperand2('');
+			setOpertor('');
+		} else if (result === 0 && NUMS.includes(e.target.id)) {
+			if (opertor === '') {
+				if (operand1 === '' && e.target.id === '0') {
+					setOperand1('');
+				} else {
+					setOperand1(() => operand1 + e.target.id);
+				}
+			} else {
+				if (operand2 === '' && e.target.id === '0') {
+					setOperand2('');
+				} else {
+					setOperand2(() => operand2 + e.target.id);
+				}
+			}
+		} else if (operand2 === '' && e.target.id === 'butPlus') {
+			result = 0;
+			setOpertor('+');
+		} else if (operand2 === '' && e.target.id === 'butMinus') {
+			result = 0;
+			setOpertor('-');
+		} else if (e.target.id === 'butResult' && operand2 !== '') {
+			result = eval(operand1 + opertor + operand2);
+
+			setOperand1('' + result);
+			setOperand2('');
+			setOpertor('');
+
+			console.log('Результат=', result);
+		} else {
+			console.log('Неизвестный клик', e.target.id);
+		}
+	}
 
 	return (
-		// здесь использован декларативный стиль написания HTML
-		// императивный стиль HTML  это через createElement
 		<div>
 			<div className={styles.container}>
-				{/* <header className={styles['app-header']}>Calculate</header> */}
 				<h1 className={styles['page-heading']}>Калькулятор</h1>
 
-				{/* кнопки Назад, Вперед и Начать сначала */}
 				<div className={styles['buttons-container']}>
-					<div className={styles['result-content']}>{resultContent}</div>
-					<button id="butClear" className={styles.button} onClick={butClear}>
-						C
-					</button>
-					<button id="butPlus" className={styles.button} onClick={butPlus}>
-						+
-					</button>
-					<button id="butMinus" className={styles.button} onClick={butMinus}>
-						-
-					</button>
+					<div className={styles['result-content']}>
+						{operand1 === '' && opertor === '' && operand2 === ''
+							? '0'
+							: operand1 + opertor + operand2}
+					</div>
 
-					<button id="Num1" className={styles.button} onClick={Num1}>
-						1
-					</button>
-					<button id="Num2" className={styles.button} onClick={Num2}>
-						2
-					</button>
-					<button id="Num3" className={styles.button} onClick={Num3}>
-						3
-					</button>
-					<button id="Num4" className={styles.button} onClick={Num4}>
-						4
-					</button>
-					<button id="Num5" className={styles.button} onClick={Num5}>
-						5
-					</button>
-					<button id="Num6" className={styles.button} onClick={Num6}>
-						6
-					</button>
-					<button id="Num7" className={styles.button} onClick={Num7}>
-						7
-					</button>
-					<button id="Num8" className={styles.button} onClick={Num8}>
-						8
-					</button>
-					<button id="Num9" className={styles.button} onClick={Num9}>
-						9
-					</button>
-					<button
-						id="Num0"
-						className={`${styles.button} ${styles['button-zero']}`}
-						onClick={Num0}
-					>
-						0
-					</button>
-					<button
-						id="butResult"
-						className={`${styles.button} ${styles['button-equal']}`}
-						onClick={butResult}
-					>
-						=
-					</button>
+					{buttons.map((item) => (
+						<button
+							id={item.id}
+							className={
+								item.nameStyle === ''
+									? styles.button
+									: `${styles.button} ${styles[item.nameStyle]}`
+							}
+							onClick={item.func}
+							key={item.id}
+						>
+							{item.content}
+						</button>
+					))}
 				</div>
 			</div>
 		</div>
