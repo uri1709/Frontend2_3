@@ -42,8 +42,6 @@ export const App = () => {
 	});
 
 	function butClick(e) {
-		console.log(e.target.id);
-
 		if (e.target.id === 'butClear') {
 			result = undefined;
 			setOperand1('');
@@ -67,14 +65,10 @@ export const App = () => {
 			setOperand1(result !== undefined ? '' + result : '');
 			setOperand2('');
 			setOpertor('');
-
-			// console.log('Результат=', result);
 		} else {
 			console.log('Неизвестный клик', e.target.id);
 		}
 	}
-
-	// console.log(styles);
 
 	return (
 		<div>
@@ -83,7 +77,6 @@ export const App = () => {
 
 				<div className={styles['buttons-container']}>
 					<div
-						// className={styles['result-content']}
 						className={
 							result === undefined
 								? `${styles['result-content']} ${styles.blue}`
@@ -103,7 +96,6 @@ export const App = () => {
 									? styles.button
 									: `${styles.button} ${styles[item.styleAdditional]}`
 							}
-							// className={{ ...styles.button }}
 							onClick={item.func}
 							key={item.id}
 						>
