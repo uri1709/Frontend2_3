@@ -25,6 +25,7 @@
 	font-size: 18px;
 	border: none;
 	transition: background-color 0.15s ease;
+	color: white;
 }
 
 .button-equal {
@@ -56,4 +57,13 @@
 	padding: 15px 20px;
 	font-size: 18px;
 	text-align: right;
+	font-weight: bold;
+}
+
+.blue {
+	color: blue;
+}
+
+.red {
+	color: red;
 }

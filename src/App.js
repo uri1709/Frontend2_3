@@ -2,7 +2,7 @@ import styles from './App.module.css';
 import './App.css';
 import { useState } from 'react';
 
-let result = 0;
+let result;
 
 export const App = () => {
 	const NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -13,22 +13,22 @@ export const App = () => {
 
 	const buttons = [];
 
-	buttons.push({ id: 'butClear', nameStyle: '', content: 'C', func: butClick });
-	buttons.push({ id: 'butPlus', nameStyle: '', content: '+', func: butClick });
-	buttons.push({ id: 'butMinus', nameStyle: '', content: '-', func: butClick });
+	buttons.push({ id: 'butClear', styleAdditional: '', content: 'C', func: butClick });
+	buttons.push({ id: 'butPlus', styleAdditional: '', content: '+', func: butClick });
+	buttons.push({ id: 'butMinus', styleAdditional: '', content: '-', func: butClick });
 
 	NUMS.forEach((num) => {
 		if (num === '0') {
 			buttons.push({
 				id: '0',
-				nameStyle: 'button-zero',
+				styleAdditional: 'button-zero',
 				content: '0',
 				func: butClick,
 			});
 		} else {
 			buttons.push({
 				id: `${num}`,
-				nameStyle: '',
+				styleAdditional: '',
 				content: num,
 				func: butClick,
 			});
@@ -36,7 +36,7 @@ export const App = () => {
 	});
 	buttons.push({
 		id: 'butResult',
-		nameStyle: 'button-equal',
+		styleAdditional: 'button-equal',
 		content: '=',
 		func: butClick,
 	});
@@ -45,42 +45,36 @@ export const App = () => {
 		console.log(e.target.id);
 
 		if (e.target.id === 'butClear') {
-			result = 0;
+			result = undefined;
 			setOperand1('');
 			setOperand2('');
 			setOpertor('');
-		} else if (result === 0 && NUMS.includes(e.target.id)) {
+		} else if (result === undefined && NUMS.includes(e.target.id)) {
 			if (opertor === '') {
-				if (operand1 === '' && e.target.id === '0') {
-					setOperand1('');
-				} else {
-					setOperand1(() => operand1 + e.target.id);
-				}
+				setOperand1(() => operand1 + e.target.id);
 			} else {
-				if (operand2 === '' && e.target.id === '0') {
-					setOperand2('');
-				} else {
-					setOperand2(() => operand2 + e.target.id);
-				}
+				setOperand2(() => operand2 + e.target.id);
 			}
 		} else if (operand2 === '' && e.target.id === 'butPlus') {
-			result = 0;
+			result = undefined;
 			setOpertor('+');
 		} else if (operand2 === '' && e.target.id === 'butMinus') {
-			result = 0;
+			result = undefined;
 			setOpertor('-');
 		} else if (e.target.id === 'butResult' && operand2 !== '') {
 			result = eval(operand1 + opertor + operand2);
 
-			setOperand1('' + result);
+			setOperand1(result !== undefined ? '' + result : '');
 			setOperand2('');
 			setOpertor('');
 
-			console.log('Результат=', result);
+			// console.log('Результат=', result);
 		} else {
 			console.log('Неизвестный клик', e.target.id);
 		}
 	}
+
+	// console.log(styles);
 
 	return (
 		<div>
@@ -88,7 +82,14 @@ export const App = () => {
 				<h1 className={styles['page-heading']}>Калькулятор</h1>
 
 				<div className={styles['buttons-container']}>
-					<div className={styles['result-content']}>
+					<div
+						// className={styles['result-content']}
+						className={
+							result === undefined
+								? `${styles['result-content']} ${styles.blue}`
+								: `${styles['result-content']} ${styles.red}`
+						}
+					>
 						{operand1 === '' && opertor === '' && operand2 === ''
 							? '0'
 							: operand1 + opertor + operand2}
@@ -98,10 +99,11 @@ export const App = () => {
 						<button
 							id={item.id}
 							className={
-								item.nameStyle === ''
+								item.styleAdditional === ''
 									? styles.button
-									: `${styles.button} ${styles[item.nameStyle]}`
+									: `${styles.button} ${styles[item.styleAdditional]}`
 							}
+							// className={{ ...styles.button }}
 							onClick={item.func}
 							key={item.id}
 						>
