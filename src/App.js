@@ -77,18 +77,14 @@ export const App = () => {
 
 				<div className={styles['buttons-container']}>
 					<div
-						className={
-							result === undefined
-								? `${styles['result-content']} ${styles.blue}`
-								: `${styles['result-content']} ${styles.red}`
-						}
+						className={`${styles['result-content']} ${result === undefined ? styles.blue : styles.red}`}
 					>
 						{operand1 === '' && opertor === '' && operand2 === ''
 							? '0'
 							: operand1 + opertor + operand2}
 					</div>
 
-					{buttons.map((item) => (
+					{/* {buttons.map((item) => (
 						<button
 							id={item.id}
 							className={
@@ -100,6 +96,16 @@ export const App = () => {
 							key={item.id}
 						>
 							{item.content}
+						</button>
+					))} */}
+					{buttons.map(({ id, styleAdditional, content, func }) => (
+						<button
+							id={id}
+							className={`${styles.button} ${styleAdditional === '' ? '' : styles[styleAdditional]}`}
+							onClick={func}
+							key={id}
+						>
+							{content}
 						</button>
 					))}
 				</div>
